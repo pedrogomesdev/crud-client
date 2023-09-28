@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pedrogomesdev.crud.dto.ClientDTO;
 import com.pedrogomesdev.crud.entities.Client;
 import com.pedrogomesdev.crud.repositories.ClientRepository;
+import com.pedrogomesdev.crud.services.expections.NotFoundException;
 
 @Service
 public class ClientService {
@@ -16,7 +17,7 @@ public class ClientService {
 	
 	@Transactional(readOnly = true)
 	public ClientDTO findId(Long id) { 
-		Client client = repository.findById(id).get();
+		Client client = repository.findById(id).orElseThrow(() -> new NotFoundException("Recurso não encontrado")) ;
 		return new ClientDTO(client);		
 	}
 	
