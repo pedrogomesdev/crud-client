@@ -1,4 +1,4 @@
-INSERT INTO client (birth_date, children, income, cpf, name) VALUES ('2001-01-22', 1, 50.000, '12345678901', 'Artur Henrique');
+INSERT INTO client (birth_date, children, income, cpf, name) VALUES ('2001-01-22', 1, 50.000, '12345678903', 'Artur Henrique');
 INSERT INTO client (birth_date, children, income, cpf, name) VALUES ('1995-07-10', 2, 70.000, '98765432109', 'Maria Silva');
 INSERT INTO client (birth_date, children, income, cpf, name) VALUES ('1988-03-15', 5, 45.000, '56789012345', 'João Santos');
 INSERT INTO client (birth_date, children, income, cpf, name) VALUES ('1990-11-28', 3, 60.000, '34567890123', 'Ana Oliveira');
