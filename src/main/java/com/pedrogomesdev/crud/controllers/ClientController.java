@@ -24,33 +24,31 @@ import jakarta.validation.Valid;
 @RequestMapping(value = "/clients")
 public class ClientController {
 
-	
 	@Autowired
 	private ClientService service;
-	
+
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> findId(@PathVariable Long id){
+	public ResponseEntity<ClientDTO> findId(@PathVariable Long id) {
 		ClientDTO dto = service.findId(id);
 		return ResponseEntity.ok(dto);
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<Page<ClientDTO>> findAll(Pageable pageable){
+	public ResponseEntity<Page<ClientDTO>> findAll(Pageable pageable) {
 		Page<ClientDTO> dto = service.findAll(pageable);
 		return ResponseEntity.ok(dto);
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<ClientDTO>  insert(@Valid @RequestBody ClientDTO dto) { 
-			dto = service.insert(dto);	
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-	                .buildAndExpand(dto.getId()).toUri();
-			 return ResponseEntity.created(uri).body(dto);
+	public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO dto) {
+		dto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
 	}
-	
+
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO>  update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) { 
-			dto = service.update(id, dto);	
-			 return ResponseEntity.ok(dto);
+	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
+		dto = service.update(id, dto);
+		return ResponseEntity.ok(dto);
 	}
 }

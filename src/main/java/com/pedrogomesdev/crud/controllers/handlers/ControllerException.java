@@ -5,14 +5,17 @@ import java.time.Instant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.pedrogomesdev.crud.dto.CustomError;
 import com.pedrogomesdev.crud.dto.ValidationErrorDTO;
 import com.pedrogomesdev.crud.services.expections.NotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -34,4 +37,18 @@ public class ControllerException {
         }
 		return ResponseEntity.status(status).body(error);
 	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public  ResponseEntity<CustomError> entityNotFoundException(EntityNotFoundException e, HttpServletRequest request){
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		CustomError error = new CustomError(Instant.now(), status.value(), "Cliente Inexistente", request.getRequestURI());
+		return ResponseEntity.status(status).body(error);
+	}
+	
+	
+	
+	
+	
+	
+	
 }
