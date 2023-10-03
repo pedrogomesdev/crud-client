@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pedrogomesdev.crud.dto.ClientDTO;
@@ -16,27 +17,27 @@ public class ClientService {
 
 	@Autowired
 	private ClientRepository repository;
-	
+
 	@Transactional(readOnly = true)
-	public ClientDTO findId(Long id) { 
-		Client client = repository.findById(id).orElseThrow(() -> new NotFoundException("Recurso não encontrado")) ;
-		return new ClientDTO(client);		
+	public ClientDTO findId(Long id) {
+		Client client = repository.findById(id).orElseThrow(() -> new NotFoundException("Cliente Inexistente"));
+		return new ClientDTO(client);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Page<ClientDTO> findAll(Pageable page) { 
+	public Page<ClientDTO> findAll(Pageable page) {
 		Page<Client> client = repository.findAll(page);
-		return client.map(x -> new ClientDTO(x));		
+		return client.map(x -> new ClientDTO(x));
 	}
-	
+
 	@Transactional
-	public ClientDTO insert(ClientDTO dto) { 
+	public ClientDTO insert(ClientDTO dto) {
 		Client entity = new Client();
 		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 		return new ClientDTO(entity);
 	}
-	
+
 	@Transactional
 	public ClientDTO update(Long id, ClientDTO dto) {
 		Client entity = repository.getReferenceById(id);
@@ -44,14 +45,21 @@ public class ClientService {
 		entity = repository.save(entity);
 		return new ClientDTO(entity);
 	}
-	
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	public void delete(Long id) {
+		if (!repository.existsById(id)) {
+			throw new NotFoundException("Cliente Inexistente");
+		}
+		repository.deleteById(id);   
+	}
+
 	private void copyDtoToEntity(ClientDTO dto, Client entity) {
-        entity.setName(dto.getName());
-        entity.setCpf(dto.getCpf());
-        entity.setIncome(dto.getIncome());
-        entity.setBirthDate(dto.getBirthDate());
-        entity.setChildren(dto.getChildren());
-    }
+		entity.setName(dto.getName());
+		entity.setCpf(dto.getCpf());
+		entity.setIncome(dto.getIncome());
+		entity.setBirthDate(dto.getBirthDate());
+		entity.setChildren(dto.getChildren());
+	}
 
 }
-	
